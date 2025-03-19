@@ -1,7 +1,9 @@
 package com.lovinsharma.kalanikethancic.ui.theme
 
 import android.app.Activity
+import android.hardware.lights.Light
 import android.os.Build
+import android.sax.Element
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -12,15 +14,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = LightPrimary,
+    secondary = LightSecondary,
+    tertiary = LightHighlight
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = LightPrimary, // This is for the sideBar
+    secondary = LightSecondary, // This is for the title bar
+    tertiary = ElementBackground, // This is for text fields
+    background = LightBackground, // This is for the background
+    onPrimary = ButtonPrimary, // This is for buttons.
+    onSecondary = LightHighlight, // This is for when buttons are highlighted.
+
+
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
