@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -68,13 +69,6 @@ class MainActivity : ComponentActivity() {
                 val scope = rememberCoroutineScope()
                 var selectedScreen by remember { mutableStateOf("Home") }
 
-                var drawerPosition by remember { mutableStateOf(0f) } // 0f for closed, 1f for open
-
-                // Custom animation for smooth drawer transition
-                val animatedDrawerPosition by animateFloatAsState(
-                    targetValue = drawerPosition,
-                    animationSpec = tween(durationMillis = 100) // Smooth transition over 500ms
-                )
 
 
                 ModalNavigationDrawer(
@@ -84,7 +78,7 @@ class MainActivity : ComponentActivity() {
                             selectedScreen = selectedScreen,
                             onScreenSelected = {
                                 selectedScreen = it
-                                drawerPosition = 0f // Close the drawer
+                                scope.launch { drawerState.animateTo(DrawerValue.Closed, tween(500)) } // Close the drawer
                                 navController.navigate(it)
                             }
                         )
@@ -92,7 +86,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Scaffold { padding ->
 
-                        IconButton(onClick = { scope.launch { drawerPosition = 1f } }) {
+                        IconButton(onClick = { scope.launch { drawerState.animateTo(DrawerValue.Open, tween(500)) } }) {
                             Icon(Icons.Default.Menu, contentDescription = "Menu")
                         }
                         Column(modifier = Modifier.padding(padding)) {
@@ -112,14 +106,6 @@ class MainActivity : ComponentActivity() {
 
 
 
-                        // Manually handle the drawer's position based on animation
-                        LaunchedEffect(animatedDrawerPosition) {
-                            if (animatedDrawerPosition == 0f) {
-                                drawerState.close() // Close the drawer if the position reaches 0
-                            } else if (animatedDrawerPosition == 1f) {
-                                drawerState.open() // Open the drawer if the position reaches 1
-                            }
-                        }
 
 
 
@@ -239,4 +225,3 @@ fun CustomIcon(iconResId: Int, contentDescription: String) {
         tint = Color.White // Tint the icon white
     )
 }
-
